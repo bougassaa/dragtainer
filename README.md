@@ -2,6 +2,8 @@
 
 `dragtainer` is used to place DOM elements in row and column. Using native Drag and Drop, compatible on all browsers.
 
+![dragtainer demo](./presentation.gif)
+
 ## How to use
 For dragtainer to work it is important to: 
 - **add style**, here is a style you can add and are free to change (_Note : It is strongly advised to use Flexbox, to have a better experience_):
