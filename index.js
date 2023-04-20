@@ -1,4 +1,4 @@
-export default class Draggable {
+export default class Dragtainer {
     /** @type {HTMLElement} */
     current = null;
     rootNode = null;
