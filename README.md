@@ -102,5 +102,6 @@ let dragtainer = new Dragtainer({
 })
 
 dragtainer.initialize(); // initialize dropzones between blocks and activate DnD behaviors
+dragtainer.onItemDrop(item => {}); // when an item has been droped in container, pass a callback function with the item that has been droped as a parameter
 dragtainer.getItemsPositions(); // returns an array with the positions (row, col and the HTML element)
 ```
