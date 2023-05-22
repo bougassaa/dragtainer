@@ -16,7 +16,7 @@ declare class Dragtainer {
     dropzoneHoverClass: string;
     draggingClass: string;
 
-    constructor(options: Object);
+    constructor(options?: Object);
 
     onItemDropCallback: Function;
     parentContainerOver: Function;
@@ -42,7 +42,7 @@ declare class Dragtainer {
     registerDraggableItem(item: HTMLElement): void;
     canHaveDropzone(element: HTMLElement): void;
     onItemDrop(callback: Function): void;
-    getItemsPositions(): Array<object>;
+    getItemsPositions(): Array<{item: HTMLElement, row: number, col: number}>;
 }
 
 export default Dragtainer;
