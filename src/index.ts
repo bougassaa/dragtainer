@@ -1,22 +1,22 @@
 export default class Dragtainer {
-    current = null;
-    rootNode = null;
-    parentContainer = null;
-    libraryContainer = null;
-    maxItemsPerRow = 10;
+    current?: HTMLElement = null;
+    rootNode?: HTMLElement = null;
+    parentContainer?: HTMLElement = null;
+    libraryContainer?: HTMLElement = null;
+    maxItemsPerRow: number = 10;
 
-    parentContainerClass = 'drag-parent-container';
-    libraryContainerClass = 'drag-library-container';
-    rowClass = 'drag-row';
-    itemClass = 'drag-item';
-    horizontalClass = 'drag-horizontal';
-    dropzoneClass = 'drag-dropzone';
-    dropzoneXClass = 'drag-dropzone-x';
-    dropzoneYClass = 'drag-dropzone-y';
-    dropzoneHoverClass = 'drag-dropzone--hover';
-    draggingClass = 'drag-dragging';
+    parentContainerClass: string = 'drag-parent-container';
+    libraryContainerClass: string = 'drag-library-container';
+    rowClass: string = 'drag-row';
+    itemClass: string = 'drag-item';
+    horizontalClass: string = 'drag-horizontal';
+    dropzoneClass: string = 'drag-dropzone';
+    dropzoneXClass: string = 'drag-dropzone-x';
+    dropzoneYClass: string = 'drag-dropzone-y';
+    dropzoneHoverClass: string = 'drag-dropzone--hover';
+    draggingClass: string = 'drag-dragging';
 
-    onItemDropCallback = (element: HTMLElement) => {}
+    onItemDropCallback: Function = (element: HTMLElement) => {}
 
     constructor(options: {
         rootNode,
