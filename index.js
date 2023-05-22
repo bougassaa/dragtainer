@@ -1,5 +1,4 @@
 export default class Dragtainer {
-    /** @type {HTMLElement} */
     current = null;
     rootNode = null;
     parentContainer = null;
