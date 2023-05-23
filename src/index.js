@@ -1,41 +1,42 @@
-export default class Dragtainer {
-    current = null;
-    rootNode = null;
-    parentContainer = null;
-    libraryContainer = null;
-    maxItemsPerRow = 10;
+function Dragtainer(options = {}) {
+    const defaultValues = {
+        parentContainerClass: 'drag-parent-container',
+        libraryContainerClass: 'drag-library-container',
+        rowClass: 'drag-row',
+        itemClass: 'drag-item',
+        horizontalClass: 'drag-horizontal',
+        dropzoneClass: 'drag-dropzone',
+        dropzoneXClass: 'drag-dropzone-x',
+        dropzoneYClass: 'drag-dropzone-y',
+        dropzoneHoverClass: 'drag-dropzone--hover',
+        draggingClass: 'drag-dragging',
+        maxItemsPerRow: 10,
+        rootNode: document
+    };
 
-    parentContainerClass = 'drag-parent-container';
-    libraryContainerClass = 'drag-library-container';
-    rowClass = 'drag-row';
-    itemClass = 'drag-item';
-    horizontalClass = 'drag-horizontal';
-    dropzoneClass = 'drag-dropzone';
-    dropzoneXClass = 'drag-dropzone-x';
-    dropzoneYClass = 'drag-dropzone-y';
-    dropzoneHoverClass = 'drag-dropzone--hover';
-    draggingClass = 'drag-dragging';
-
-    onItemDropCallback = () => {}
-
-    constructor(options = {}) {
-        this.rootNode = options.rootNode ?? document;
-        this.parentContainer = options.parentContainer ?? this.rootNode.querySelector(`.${this.parentContainerClass}`);
-        this.libraryContainer = options.libraryContainer ?? this.rootNode.querySelector(`.${this.libraryContainerClass}`);
-        this.maxItemsPerRow = options.maxItemsPerRow ?? this.maxItemsPerRow;
-        this.parentContainerClass = options.parentContainerClass ?? this.parentContainerClass;
-        this.libraryContainerClass = options.libraryContainerClass ?? this.libraryContainerClass;
-        this.rowClass = options.rowClass ?? this.rowClass;
-        this.itemClass = options.itemClass ?? this.itemClass;
-        this.horizontalClass = options.horizontalClass ?? this.horizontalClass;
-        this.dropzoneClass = options.dropzoneClass ?? this.dropzoneClass;
-        this.dropzoneXClass = options.dropzoneXClass ?? this.dropzoneXClass;
-        this.dropzoneYClass = options.dropzoneYClass ?? this.dropzoneYClass;
-        this.dropzoneHoverClass = options.dropzoneHoverClass ?? this.dropzoneHoverClass;
-        this.draggingClass = options.draggingClass ?? this.draggingClass;
+    for (const prop in defaultValues) {
+        if (options.hasOwnProperty(prop)) {
+            this[prop] = defaultValues[prop];
+        } else {
+            this[prop] = options[prop];
+        }
     }
 
-    parentContainerOver = (event) => {
+    if (options.hasOwnProperty('parentContainer')) {
+        this.parentContainer = options.parentContainer;
+    } else {
+        this.parentContainer = this.rootNode.querySelector(`.${this.parentContainerClass}`);
+    }
+
+    if (options.hasOwnProperty('libraryContainer')) {
+        this.libraryContainer = options.libraryContainer;
+    } else {
+        this.libraryContainer = this.rootNode.querySelector(`.${this.libraryContainerClass}`);
+    }
+
+    let onItemDropCallback = () => {};
+
+    this.parentContainerOver = (event) => {
         let rect = this.parentContainer.getBoundingClientRect();
         let threshold = 100;
         let speed = 10;
@@ -49,7 +50,7 @@ export default class Dragtainer {
         }
     }
 
-    dropzoneOver = event => {
+    this.dropzoneOver = event => {
         if (this.preventHorizontalDrop(event)) {
             return;
         }
@@ -59,16 +60,16 @@ export default class Dragtainer {
         this.addDropzoneHighlight(event.target);
     }
 
-    dropzoneLeave = event => {
+    this.dropzoneLeave = event => {
         this.removeDropzoneHighlight(event.target);
     }
 
-    dropzoneEnd = event => {
+    this.dropzoneEnd = event => {
         this.dropzoneLeave(event);
         this.replaceDropzoneByItem(event.target);
     }
 
-    horizontalItemOver = event => {
+    this.horizontalItemOver = event => {
         if (this.preventHorizontalDrop(event)) {
             return;
         }
@@ -87,12 +88,12 @@ export default class Dragtainer {
         }
     }
 
-    horizontalItemLeave = event => {
+    this.horizontalItemLeave = event => {
         this.removeDropzoneHighlight(event.target.nextElementSibling);
         this.removeDropzoneHighlight(event.target.previousElementSibling);
     }
 
-    horizontalItemEnd = event => {
+    this.horizontalItemEnd = event => {
         this.horizontalItemLeave(event);
 
         if (this.isLeftDropzoneOvered(event)) {
@@ -102,23 +103,23 @@ export default class Dragtainer {
         }
     }
 
-    isLeftDropzoneOvered(event) {
+    this.isLeftDropzoneOvered = (event) => {
         return event.offsetX < (event.target.offsetWidth / 2);
     }
 
-    addDropzoneHighlight(dropzone) {
+    this.addDropzoneHighlight = (dropzone) => {
         if (dropzone instanceof HTMLElement && dropzone.classList.contains(this.dropzoneClass)) {
             dropzone.classList.add(this.dropzoneHoverClass);
         }
     }
 
-    removeDropzoneHighlight(dropzone) {
+    this.removeDropzoneHighlight = (dropzone) => {
         if (dropzone instanceof HTMLElement) {
             dropzone.classList.remove(this.dropzoneHoverClass);
         }
     }
 
-    preventHorizontalDrop(event) {
+    this.preventHorizontalDrop = (event) => {
         let dropzoneParent = event.target.parentElement;
         let parentHasRowClass = dropzoneParent.classList.contains(this.rowClass);
         let hasHorizontalChild = dropzoneParent.querySelector(`.${this.horizontalClass}`);
@@ -128,7 +129,7 @@ export default class Dragtainer {
         return parentHasRowClass && (!currentHasHorizontalClass || !hasHorizontalChild || numberOfItemsInRow >= this.maxItemsPerRow);
     }
 
-    replaceDropzoneByItem(dropzone) {
+    this.replaceDropzoneByItem = (dropzone) => {
         if (dropzone instanceof HTMLElement) {
             let dropzoneParent = dropzone.parentElement, row;
 
@@ -138,14 +139,14 @@ export default class Dragtainer {
                 row.appendChild(this.current);
             }
 
-            dropzone.replaceWith(row ?? this.current);
+            dropzone.replaceWith(row ? row : this.current);
 
             this.onItemDropCallback(this.current);
             this.initialize();
         }
     }
 
-    initialize() {
+    this.initialize = () => {
         this.parentContainer.ondragover = event => this.parentContainerOver(event);
 
         this.removeExistingDropzone();
@@ -156,11 +157,11 @@ export default class Dragtainer {
         return this;
     }
 
-    removeExistingDropzone() {
+    this.removeExistingDropzone = () => {
         this.parentContainer.querySelectorAll(`.${this.dropzoneClass}`).forEach(dropzone => dropzone.remove());
     }
 
-    initializeRows() {
+    this.initializeRows = () => {
         this.parentContainer.querySelectorAll(`.${this.rowClass}`).forEach(row => {
             if (!row.querySelector(`.${this.itemClass}`)) { // remove empty row
                 row.remove();
@@ -170,7 +171,7 @@ export default class Dragtainer {
         });
     }
 
-    initializeItems() {
+    this.initializeItems = () => {
         [this.parentContainer, this.libraryContainer].forEach(container => {
             if (container instanceof HTMLElement) {
                 container.querySelectorAll(`.${this.itemClass}`).forEach(item => {
@@ -183,14 +184,14 @@ export default class Dragtainer {
         });
     }
 
-    handleDefaultDropzone() {
+    this.handleDefaultDropzone = () => {
         if (!this.parentContainer.querySelector(`.${this.dropzoneClass}`)) {
             let dropzone = this.createDropzone(this.parentContainer);
             this.parentContainer.append(dropzone);
         }
     }
 
-    insertDropzone(element) {
+    this.insertDropzone = (element) => {
         if (this.canHaveDropzone(element)) {
             if (element.parentElement.firstElementChild === element) {
                 element.insertAdjacentElement('beforebegin', this.createDropzone(element));
@@ -199,7 +200,7 @@ export default class Dragtainer {
         }
     }
 
-    createDropzone(elem) {
+    this.createDropzone = (elem) => {
         let dropzone = document.createElement("div");
 
         if (elem.classList.contains(this.itemClass)) {
@@ -216,7 +217,7 @@ export default class Dragtainer {
         return dropzone;
     }
 
-    registerDraggableItem(item) {
+    this.registerDraggableItem = (item) => {
         item.ondragstart = () => {
             item.classList.add(this.draggingClass);
             this.current = item; // set current dragged item
@@ -233,15 +234,15 @@ export default class Dragtainer {
         }
     }
 
-    canHaveDropzone(element) {
+    this.canHaveDropzone = (element) => {
         return element.closest(`.${this.rowClass}`) instanceof HTMLElement;
     }
 
-    onItemDrop(callback) {
+    this.onItemDrop = (callback) => {
         this.onItemDropCallback = callback;
     }
 
-    getItemsPositions() {
+    this.getItemsPositions = () => {
         let positions = [];
         let rowIndex = 0;
 
@@ -257,3 +258,5 @@ export default class Dragtainer {
         return positions;
     }
 }
+
+export default Dragtainer;
