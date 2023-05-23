@@ -34,7 +34,7 @@ function Dragtainer(options = {}) {
         this.libraryContainer = this.rootNode.querySelector(`.${this.libraryContainerClass}`);
     }
 
-    let onItemDropCallback = () => {};
+    this.onItemDropCallback = () => {};
 
     this.parentContainerOver = (event) => {
         let rect = this.parentContainer.getBoundingClientRect();
