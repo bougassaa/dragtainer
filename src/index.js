@@ -16,9 +16,9 @@ function Dragtainer(options = {}) {
 
     for (const prop in defaultValues) {
         if (options.hasOwnProperty(prop)) {
-            this[prop] = defaultValues[prop];
-        } else {
             this[prop] = options[prop];
+        } else {
+            this[prop] = defaultValues[prop];
         }
     }
 
