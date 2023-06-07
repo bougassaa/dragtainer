@@ -126,7 +126,7 @@ function Dragtainer(options = {}) {
         let currentHasHorizontalClass = this.current.classList.contains(this.horizontalClass);
         let numberOfItemsInRow = dropzoneParent.querySelectorAll(`.${this.itemClass}`).length;
 
-        return parentHasRowClass && (!currentHasHorizontalClass || !hasHorizontalChild || numberOfItemsInRow >= this.maxItemsPerRow);
+        return parentHasRowClass && (!currentHasHorizontalClass || !hasHorizontalChild || (numberOfItemsInRow >= this.maxItemsPerRow && !dropzoneParent.contains(this.current)));
     }
 
     this.replaceDropzoneByItem = (dropzone) => {
