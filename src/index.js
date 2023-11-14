@@ -135,7 +135,14 @@ function Dragtainer(options = {}) {
         return parentHasRowClass && (!currentHasHorizontalClass || !hasHorizontalChild || (numberOfItemsInRow >= this.maxItemsPerRow && !dropzoneParent.contains(this.current)));
     }
 
-    this.getItemFromEvent = (event) => event.target.closest(`.${this.itemClass}`) ?? event.target;
+    this.getItemFromEvent = (event) => {
+        const item = event.target.closest(`.${this.itemClass}`);
+        if (item instanceof HTMLElement) {
+            return item;
+        } else {
+            return event.target;
+        }
+    }
 
     this.replaceDropzoneByItem = (dropzone) => {
         if (dropzone instanceof HTMLElement && dropzone.classList.contains(this.dropzoneClass)) {
