@@ -76,8 +76,9 @@ function Dragtainer(options = {}) {
 
         event.preventDefault();
 
-        let dropzoneLeft = event.target.previousElementSibling;
-        let dropzoneRight = event.target.nextElementSibling;
+        const item = this.getItemFromEvent(event);
+        let dropzoneLeft = item.previousElementSibling;
+        let dropzoneRight = item.nextElementSibling;
 
         if (this.isLeftDropzoneOvered(event)) {
             this.addDropzoneHighlight(dropzoneLeft);
@@ -89,22 +90,24 @@ function Dragtainer(options = {}) {
     }
 
     this.horizontalItemLeave = event => {
-        this.removeDropzoneHighlight(event.target.nextElementSibling);
-        this.removeDropzoneHighlight(event.target.previousElementSibling);
+        const item = this.getItemFromEvent(event);
+        this.removeDropzoneHighlight(item.nextElementSibling);
+        this.removeDropzoneHighlight(item.previousElementSibling);
     }
 
     this.horizontalItemEnd = event => {
         this.horizontalItemLeave(event);
-
+        const item = this.getItemFromEvent(event);
         if (this.isLeftDropzoneOvered(event)) {
-            this.replaceDropzoneByItem(event.target.previousElementSibling);
+            this.replaceDropzoneByItem(item.previousElementSibling);
         } else {
-            this.replaceDropzoneByItem(event.target.nextElementSibling);
+            this.replaceDropzoneByItem(item.nextElementSibling);
         }
     }
 
     this.isLeftDropzoneOvered = (event) => {
-        return event.offsetX < (event.target.offsetWidth / 2);
+        const item = this.getItemFromEvent(event);
+        return event.offsetX < (item.offsetWidth / 2);
     }
 
     this.addDropzoneHighlight = (dropzone) => {
@@ -120,7 +123,8 @@ function Dragtainer(options = {}) {
     }
 
     this.preventHorizontalDrop = (event) => {
-        let dropzoneParent = event.target.parentElement;
+        const item = this.getItemFromEvent(event);
+        let dropzoneParent = item.parentElement;
         let parentHasRowClass = dropzoneParent.classList.contains(this.rowClass);
         let hasHorizontalChild = dropzoneParent.querySelector(`.${this.horizontalClass}`);
         let currentHasHorizontalClass = this.current.classList.contains(this.horizontalClass);
@@ -129,8 +133,10 @@ function Dragtainer(options = {}) {
         return parentHasRowClass && (!currentHasHorizontalClass || !hasHorizontalChild || (numberOfItemsInRow >= this.maxItemsPerRow && !dropzoneParent.contains(this.current)));
     }
 
+    this.getItemFromEvent = (event) => event.target.closest(`.${this.itemClass}`) ?? event.target;
+
     this.replaceDropzoneByItem = (dropzone) => {
-        if (dropzone instanceof HTMLElement) {
+        if (dropzone instanceof HTMLElement && dropzone.classList.contains(this.dropzoneClass)) {
             let dropzoneParent = dropzone.parentElement, row;
 
             if (!dropzoneParent.classList.contains(this.rowClass)) {
