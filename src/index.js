@@ -107,7 +107,9 @@ function Dragtainer(options = {}) {
 
     this.isLeftDropzoneOvered = (event) => {
         const item = this.getItemFromEvent(event);
-        return event.offsetX < (item.offsetWidth / 2);
+        const mouseX = event.clientX - item.getBoundingClientRect().left;
+
+        return (mouseX / item.offsetWidth) < 0.5;
     }
 
     this.addDropzoneHighlight = (dropzone) => {
